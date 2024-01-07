@@ -84,7 +84,6 @@ def main():
                 print('файл не создан. Создайте его!')
                 continue
             for el in read_fale(file_name):
-                print(el)
+                print(f'{el["имя"]}, {el["фамилия"]}, {el["телефон"]}')
 
 main()
-
