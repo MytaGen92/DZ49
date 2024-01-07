@@ -119,7 +119,7 @@ def main():
         elif command == 'w':
             if not exists(file_name):
                 creat_file(file_name)
-            write_fale(file_name)
+            write_fale(file_name, user_data='')
         elif command == 'r':
             if not exists(file_name):
                 print('файл не создан. Создайте его!')
