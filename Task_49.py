@@ -71,6 +71,11 @@ def write_fale(file_name):
 file_name = 'phone.csv'
 
 def main():
+    print("список доступных команд ")
+    print('\'r\'-вывод телефонного справочника в консоль')
+    print('\'w\'-сохранить новый контак')
+    print('\'с\'-скопировать контак из одного файла в другой')
+    print('\'q\'-закрыть программу')
     while True:
         command = input('введите команду: ')
         if command == 'q':
@@ -85,5 +90,5 @@ def main():
                 continue
             for el in read_fale(file_name):
                 print(f'{el["имя"]}, {el["фамилия"]}, {el["телефон"]}')
-
+        
 main()
