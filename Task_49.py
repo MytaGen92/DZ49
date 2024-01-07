@@ -83,7 +83,8 @@ def main():
             if not exists(file_name):
                 print('файл не создан. Создайте его!')
                 continue
-            print(+read_fale(file_name))
+            for el in read_fale(file_name):
+                print(el)
 
 main()
 
