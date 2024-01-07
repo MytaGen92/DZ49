@@ -13,7 +13,7 @@ from os.path import exists
 def get_info():
     is_valid_first_name = False
     while not is_valid_first_name:
-        first_name = str(input('Введите имя: '))
+        first_name = str(input('Введите имя: ')).lower()
         if len(first_name) < 2:
             print('Невалидное имя! ')
             continue
@@ -24,7 +24,7 @@ def get_info():
     
     is_valid_last_name = False
     while not is_valid_last_name:       
-        last_name = str(input('Введите фамилию: '))
+        last_name = str(input('Введите фамилию: ')).lower()
         if len(last_name) < 2:
             print('Невалидная Фамилия! ')
             continue
@@ -54,20 +54,55 @@ def read_fale(file_name):
         f_reader = DictReader(data)
         return list(f_reader)
     
-def write_fale(file_name):
+def write_fale(file_name, user_data):
     res = read_fale(file_name)
-    user_data = get_info()
-    for el in res:
-        if el['телефон'] == str(user_data[2]):
-            print('Такой пользователь уже сушествует!')
-            return
-    obj = {'имя':user_data[0], 'фамилия': user_data[1], 'телефон': user_data[2]}
+    if user_data == '':
+        user_data = get_info()
+        obj = {'Имя': user_data[0],
+               'Фамилия': user_data[1], 'Телефон': user_data[2]}
+    else:
+        obj = user_data
     res.append(obj)
+    if user_data == '':
+        for el in res:
+            if el['Телефон'] == str(user_data[2]):
+                print('Пользователь уже существует')
+                return
+            
     with open(file_name, 'w', encoding='utf-8', newline='') as data:
         f_writer = DictWriter(data, fieldnames=['имя', 'фамилия', 'телефон'])
         f_writer.writeheader()
         f_writer.writerows(res)
 
+
+def define_new_file_name():
+    new_file_name = input('Введите файл куда скопировать данные ').lower()
+    if exists(new_file_name) == True:
+        return new_file_name
+    else:
+        request = str(input('Создать новый файл? да или нет: ')).lower()
+        if request == 'да':
+            creat_file(new_file_name)
+            return new_file_name
+        else:
+            return ''
+
+
+def copy_string(file_name, new_file_name):
+    res = False
+    if file_name == '' or new_file_name == '':
+        print('Имя файла пустое')
+    else:
+        data = read_fale(file_name)
+        while res == False:
+            copy_string = int(input('Введите строку для копирования: '))
+            if copy_string < 1 or copy_string >= len(data):
+                print('Введите значение от 1 до ' + str(len(data)))
+            else:
+                write_fale(new_file_name, data[copy_string-1])
+                res = True
+    return res
+        
 file_name = 'phone.csv'
 
 def main():
@@ -78,7 +113,7 @@ def main():
     print('\'q\'-закрыть программу')
     print('\'h\'-вызов помощи')
     while True:
-        command = input('введите команду: ')
+        command = input('введите команду: ').lower()
         if command == 'q':
             break
         elif command == 'w':
@@ -98,5 +133,10 @@ def main():
             print('\'с\'-скопировать контак из одного файла в другой')
             print('\'q\'-закрыть программу')
             print('\'h\'-вызов помощи')
+        elif command == 'c':
+            if copy_string(file_name, define_new_file_name()) == True:
+                print('Строка скопирована')
+            else:
+                print('Скопировать строку не удалось')
         
 main()
